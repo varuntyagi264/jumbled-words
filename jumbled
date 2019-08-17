@@ -1,0 +1,63 @@
+#include <stdio.h>
+#include <conio.h>
+#include <string.h>
+#define MAX_WORD_LEN 6
+#define MAX_NUM_WORDS 3000
+// Struct to use.
+struct jumble {
+    char word[MAX_WORD_LEN+1];
+    char sort[MAX_WORD_LEN+1];
+};
+void bubblesort(char letters[], char length[]) {
+    char temp;
+    int i, j;
+    // initialize length array to hold pointers to each element in letters
+    for (i = 0; i < MAX_WORD_LEN; i++){
+        length[i] = letters[i];
+    }
+
+    // sort the length array
+    for(i = 0; i < MAX_WORD_LEN; i++){
+        for(j = 0; j < MAX_WORD_LEN-i-2; j++){
+            if(length[j] > length[j+1]){
+                temp = length[j];
+                length[j] = length[j+1];
+                length[j+1] = temp;
+            }
+        }
+    }
+}
+void main() {
+ 
+    struct jumble list[MAX_NUM_WORDS];
+    FILE* ifp = fopen("jumbledct.txt", "r");
+    FILE* ofp = fopen("jumble.txt", "w");
+
+ 
+
+    // Read in the number of words from the dictionary.
+
+    int numwords;
+
+    fscanf(ifp, "%d", &numwords);
+    // Go through each word.
+
+    int i;
+    for (i = 0; i < numwords; i++) {
+
+        fscanf(ifp, "%s", list[i].word);
+        // Copy the word into the sort component of the struct.
+
+        strcpy(list[i].sort, list[i].word);
+        //Initialize bubblesort array
+        bubblesort(list[i].word, list[i].sort);
+        }
+    // Print out the words and their other arrangement.
+    for (i = 0; i < numwords; i++) {
+        fprintf(ofp, "%s %s\n", list[i].word,
+                                list[i].sort);
+    }
+    fclose(ifp);
+    fclose(ofp);
+    getch();
+}
